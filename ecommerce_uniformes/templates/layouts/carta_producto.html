@@ -1,0 +1,18 @@
+<div class="card" style="width: 18rem;">
+    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" style="aspect-ratio: 1; object-fit: cover;">
+    <div class="card-body">
+        <p class="card-text text-light">
+            {% if producto.stock > 10 %}
+                <span class="badge bg-success">En stock</span>
+            {% elif producto.stock > 0 %}
+                <span class="badge bg-warning text-dark">Pocas unidades</span>
+            {% else %}
+                <span class="badge bg-danger">Agotado</span>
+            {% endif %}
+        </p>
+        <h5 class="card-title">{{ producto.nombre }}</h5>
+        <!-- <p class="card-text">{{ producto.descripcion|truncatewords:10 }}</p> -->
+        <p class="card-text fw-bold">${{ producto.precio }}</p>
+        <a href="#" class="btn btn-primary">Ver más</a>
+    </div>
+</div>

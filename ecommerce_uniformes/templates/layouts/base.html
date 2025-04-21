@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Deportes Iris</title>
+<body>
+  <header class="container-fluid bg-dark d-flex justify-content-center align-items-center text-center py-2">
+    <span class="text-light">Dudas y comentarios Whatsapp</span>
+    <span class="text-light fw-bold ms-2">+52 656 764 2563</span>
+  </header>
+  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <!-- Puedes poner tu logo o nombre aquí -->
+           <img src="{% static 'images/mariposa.png' %}" alt="Logo Deportes Iris" class="img-fluid" width="50" height="50">
+          <a class="navbar-brand fw-bold ms-2" href="{% url 'index' %}">Uniformes Iris</a>
+      
+          <!-- Menú de navegación -->
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex gap-3 align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'productos' %}">Productos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'contacto' %}">Contacto</a>
+            </li>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+            </form>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="bi bi-person-circle fs-3"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="bi bi-heart fs-3"></i></a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+{% block content %}
+{% endblock %}
+</body>
+</html>
