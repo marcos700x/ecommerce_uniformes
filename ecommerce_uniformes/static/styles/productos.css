@@ -1,0 +1,17 @@
+.contenedor-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+.carta-producto {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+.carta-producto img{
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+

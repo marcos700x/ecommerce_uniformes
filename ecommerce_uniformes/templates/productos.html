@@ -1,11 +1,17 @@
 {% extends 'layouts/base.html' %}
 
+{% load static %} 
+
+{% block productos_css %}
+<link rel="stylesheet" href="{% static 'styles/productos.css' %}">
+{% endblock %}
 
 {% block content %}
 <h1>Productos</h1>
-<div class="container-fluid d-flex flex-row flex-wrap gap-3">
+<div class="container-fluid contenedor-productos p-2">
     {% for producto in productos %}
     {% include 'layouts/carta_producto.html' %}
     {% endfor %}
 </div>
+{% include 'layouts/boton_whatsapp.html' %}
 {%endblock %}
