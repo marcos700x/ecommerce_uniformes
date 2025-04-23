@@ -2,12 +2,12 @@
 
 {% load static %} 
 
-{% block productos_css %}
+{% block catalogo_css %}
 <link rel="stylesheet" href="{% static 'styles/productos.css' %}">
 {% endblock %}
 
 {% block content %}
-<h1>Productos</h1>
+<h1>Catalogo</h1>
 <div class="container-fluid contenedor-productos p-2">
     {% for producto in productos %}
     {% include 'layouts/carta_producto.html' %}
