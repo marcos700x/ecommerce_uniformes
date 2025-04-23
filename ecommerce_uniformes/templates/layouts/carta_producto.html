@@ -12,6 +12,6 @@
         </p>
         <h5 class="card-title text-truncate">{{ producto.nombre }}</h5>
         <p class="card-text my-3">Desde ${{ producto.precio }} MXN</p>
-        <a href="{% url 'producto' producto.id %}" class="btn btn-dark d-block {% if producto.stock <= 0 %}d-none{% endif %}" ><i class="bi bi-bag-fill me-2"></i>Ver más</a>
+        <a href="{% url 'producto' producto.id %}" class="btn btn-dark d-block {% if producto.stock = 0 %}d-none{% endif %}" ><i class="bi bi-bag-fill me-2"></i>Ver más</a>
     </div>
 </div>
