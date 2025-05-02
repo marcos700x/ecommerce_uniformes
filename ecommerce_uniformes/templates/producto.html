@@ -1,37 +1,95 @@
 {% extends 'layouts/base.html' %}
 
-{% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <img src="{{ producto.imagen.url }}" alt="{{producto.nombre}}" class="img-fluid">
-        </div>
-        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-start px-5 gap-3">
-            <span>
-                {% if producto.stock > 10 %}
-                    <span class="text-success">En stock</span>
-                {% elif producto.stock > 0 %}
-                    <span class="text-warning">Pocas unidades</span>
-                {% else %}
-                    <span class="text-danger">Agotado</span>
-                {% endif %}
-            </span>
-            <div class="row">
-                <div class="col-10">
-                    <h1>{{producto.nombre}}</h1>
-            <h2>${{producto.precio}} MXN</h2>
+{% load static %}
 
-                </div>
-                <div class="col-2 d-flex justify-content-center align-items-start pt-2">
-                <i class="bi bi-heart fs-4"></i>
+
+{% block producto_js %}
+<script src="{% static 'scripts/producto.js' %}"></script>
+<script>
+    const variantes = {{ variantes_json| safe }};
+    console.log(variantes);
+
+</script>
+<link rel="stylesheet" href="{% static 'styles/producto.css' %}">
+{% endblock %}
+
+{% block catalogo_css %}
+{% endblock %}
+
+{% block content %}
+<div class="row contenedor-producto d-flex flex-row fw-light">
+    <div class="col-12 col-md-6 d-flex flex-row h-100">
+        <div class="row p-0 d-flex align-items-center">
+            <div class="col-12 col-md-2 p-0">
+                <div class="mt-2 d-flex flex-column justify-content-start gap-3 w-100">
+                    {% for color_producto in colores%}
+                    <img src="{{ color_producto.imagen_color.url }}" alt="{{ producto.nombre }}"
+                        data-color="{{ color_producto.id }}" class="w-100 thumbnail-switcher"
+                        style="aspect-ratio: 1;object-fit: cover;">
+                    {% endfor %}
                 </div>
             </div>
-            <hr class="w-100">
-            <h3>Aqui van las opciones de color</h2>
-            <h3>Aqui van las opciones de tallas</h2>
-            <button class="btn btn-dark rounded-0 w-100" ><i class="bi bi-bag-fill me-2"></i>Añadir</button>
-            <p>{{producto.descripcion}}</p>
+            <img src="{{ producto.imagen_portada.url }}" alt="{{ producto.nombre }}" class="col-12 col-md-10 ps-3"
+                id="imagen-producto" style="height: fit-content;">
         </div>
+
+    </div>
+    <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-start px-5 h-100">
+        <!-- Descripcion del producto -->
+        <div class="row w-100">
+        <span id="estado-stock" class="fs-5"></span>
+            <div class="d-flex w-100 justify-content-between">
+                <h1>{{ producto.nombre }}</h1>
+                <div class="col-2 d-flex justify-content-center align-items-start pt-2">
+                    <i class="bi bi-heart fs-4"></i>
+                </div>
+            </div>
+            <h2 id="precio-producto"></h2>
+            <span id="sku-placeholder"></span>
+
+        </div>
+        <hr class="w-100">
+        <!-- Tallas y Colores -->
+        <div class="row gap-3">
+            <!-- Colores -->
+            <h4 id="descripcion-color">Color: </h4>
+            <div>
+                <form action="" class="d-flex gap-3">
+                    {% for color_producto in colores %}
+                    <label>
+                        <input type="radio" name="opcion-color" class="color-button"
+                            data-color="{{ color_producto.id }}"
+                            style="background-color: {{ color_producto.color.codigo_hex }};">
+                        <div class="input-color" style="background-color: {{color_producto.color.codigo_hex}};"></div>
+                    </label>
+                    {% endfor %}
+                </form>
+            </div>
+            <!-- Tallas -->
+            <h4 id="descripcion-talla">Talla:</h4>
+            <div id="tallas-container">
+                {% for color_producto, tallas in color_tallas.items %}
+                <div class="tallas-color" data-color="{{ color_producto.id }}">
+                    {% for talla_variante in tallas %}
+                    <label>
+                        <input type="radio" name="opcion-talla" class="talla-button"
+                            data-talla="{{ talla_variante.talla.id }}" id="talla-{{ talla_variante.talla.id }}">
+                        <span class="input-talla">{{ talla_variante.talla.nombre }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Botón pago -->
+        <hr class="w-100">
+        <button id="btn-anadir" class="btn btn-dark px-5 py-2 mb-4"><i class="bi bi-bag-fill me-2"></i>Realizar
+            Pedido</button>
+        <!-- Descripcion -->
+        <p>{{ producto.descripcion }}</p>
     </div>
 </div>
+
+{% include 'layouts/boton_whatsapp.html' %}
+
 {% endblock %}

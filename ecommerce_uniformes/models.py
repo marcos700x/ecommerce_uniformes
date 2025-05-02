@@ -8,7 +8,7 @@ class Usuario(models.Model):
     telefono = models.CharField(max_length=15, blank=True, null=True)
     es_administrador = models.BooleanField(default=False)
     def __str__(self):
-        return self.username
+        return self.nombre
 
 class Pedido(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -24,12 +24,48 @@ class Pedido(models.Model):
 class Producto(models.Model):
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
-    imagen = models.ImageField(upload_to='productos/')
-    stock = models.PositiveIntegerField(default=0)
-    categoria = models.CharField(max_length=50)
+    imagen_portada = models.ImageField(upload_to='productos/')
+    modelo = models.CharField(max_length=50, blank=True, null=True)
+    categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True)
     def __str__(self):
         return self.nombre
+    
+class Color(models.Model):
+    nombre = models.CharField(max_length=50)
+    codigo_hex = models.CharField(max_length=7)  # Para guardar el color en HEX (#000000)
+
+    def __str__(self):
+        return self.nombre
+    
+class Talla(models.Model):
+    nombre = models.CharField(max_length=10)  # XS, S, M, L, etc.
+
+    def __str__(self):
+        return self.nombre
+    
+class ColorProducto(models.Model):
+    producto = models.ForeignKey(Producto, related_name='colores', on_delete=models.CASCADE)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    imagen_color = models.ImageField(upload_to='productos/colores/')
+
+    def __str__(self):
+        return f"{self.producto.nombre} - {self.color.nombre}"
+    
+class TallaVariante(models.Model):
+    color_producto = models.ForeignKey(ColorProducto, related_name='tallas', on_delete=models.CASCADE)
+    talla = models.ForeignKey(Talla, on_delete=models.CASCADE)
+    sku = models.CharField(max_length=50, unique=True)
+    stock = models.PositiveIntegerField(default=0)
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.color_producto} - {self.talla.nombre}"
+
+class Categoria(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+    def __str__(self):
+        return self.nombre
+
 
 class Favoritos(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)

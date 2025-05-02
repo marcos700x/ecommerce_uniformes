@@ -1,0 +1,28 @@
+.carta-producto:hover img {
+    transform: scale(1.3);
+    transition: all .3s ease;
+}
+.carta-producto img{
+    transition: all .3s ease;
+    -webkit-user-drag: none;
+    z-index: 1;
+}
+
+.carta-producto:hover .boton-favoritos {
+    opacity: 1;
+    transition: all .3 ease;
+
+}
+
+.boton-favoritos {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    opacity: 0;
+    cursor: pointer;
+    transition: all .3s ease;
+    z-index: 2;
+}
+.contenedor-imagen{
+    overflow: hidden;
+}
