@@ -30,7 +30,7 @@ class TallaVarianteAdmin(admin.ModelAdmin):
     list_filter = ('color_producto__producto', 'talla')
     search_fields = ('sku',)
 
-admin.site.register(Usuario)
+# admin.site.register(Usuario)
 admin.site.register(Pedido)
 admin.site.register(Producto, ProductoAdmin)
 admin.site.register(Favoritos)

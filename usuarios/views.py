@@ -28,7 +28,11 @@ def registro_view(request):
             return render(request, 'registro.html', {'error': 'Usuario ya existe'})
 
         user = User.objects.create_user(username=username, email=email, password=password)
+        
+        # Crear el objeto 'Usuario' asociado al 'User' recién creado
+        Usuario.objects.create(user=user)  # Esto crea una entrada en la tabla 'Usuario'
+
         login(request, user)
-        return redirect('inicio')
+        return redirect('ecommerce_uniformes/inicio')
 
     return render(request, 'registro.html')
