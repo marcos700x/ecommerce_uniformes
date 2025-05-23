@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block favoritos_links %}
+<link rel="stylesheet" href="{% static 'ecommerce_uniformes/styles/favoritos.css' %}">
+<script src="{% static 'ecommerce_uniformes/scripts/favoritos.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+  <h1 class="mt-5">Mis favoritos</h1>
+  
+  {% if favoritos %}
+    <div class="lista-productos">
+      {% for favorito in favoritos %}
+        <div class="carta-producto" data-producto-id="{{ favorito.talla_variante.id }}">
+          <img src="{{ favorito.talla_variante.color_producto.imagen_color.url }}" alt="{{ favorito.talla_variante.color_producto.producto.nombre }}">
+          <div class="col">
+            <p class="fs-5">
+              {{ favorito.talla_variante.color_producto.producto.nombre }}
+              <span class="text-muted fw-light">({{ favorito.talla_variante.color_producto.producto.escuela }})</span>
+            </p>
+            <p>SKU: {{ favorito.talla_variante.sku }}</p>
+            <p>Talla: {{ favorito.talla_variante.talla.nombre }}</p>
+            <p>Color: {{ favorito.talla_variante.color_producto.color.nombre }}</p>
+          </div>
+          <div class="row flex-column px-5">
+            <p class="fs-5">Cantidad: {{ favorito.cantidad }}</p>
+            <a href="{% url 'producto' favorito.talla_variante.color_producto.producto.id %}"  style="width: fit-content;">Ver detalles</a>
+            <a href="#" class="eliminar-favorito text-danger" data-variante-id="{{ favorito.talla_variante.id }}" style="width: fit-content;">Eliminar</a>
+          </div>
+          <p class="fs-5">${{ favorito.total }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No tienes productos en favoritos aún.</p>
+  {% endif %}
+
+  {% include 'layouts/boton_whatsapp.html' %}
+{% endblock %}
+
+{% block content_footer %}
+  {% include 'layouts/footer.html' %}
+{% endblock %}

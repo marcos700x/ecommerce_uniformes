@@ -1,0 +1,56 @@
+.carta-producto:hover img {
+    transform: scale(1.3);
+    transition: all .3s ease;
+}
+
+.carta-producto img {
+    transition: all .3s ease;
+    -webkit-user-drag: none;
+    z-index: 1;
+}
+
+.contenedor-imagen {
+    overflow: hidden;
+}
+
+.boton-favoritos-outline {
+  opacity: 1;
+  z-index: 2;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: gray;
+}
+
+.boton-favoritos-fill {
+  opacity: 0;
+  z-index: 3;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: red;
+}
+
+/* Cuando está activo, muestra el corazón lleno y oculta el contorno */
+.boton-favoritos.activo .boton-favoritos-fill {
+  opacity: 1;
+}
+
+.boton-favoritos.activo .boton-favoritos-outline {
+  opacity: 0;
+}
+
+/* Al hacer hover siempre mostrar el corazón relleno */
+.boton-favoritos:hover .boton-favoritos-outline,
+.boton-favoritos:focus .boton-favoritos-outline {
+  opacity: 0;
+}
+
+.boton-favoritos:hover .boton-favoritos-fill,
+.boton-favoritos:focus .boton-favoritos-fill {
+  opacity: 1;
+}

@@ -1,0 +1,52 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<h1 class="mt-5">Contáctanos</h1>
+<div class="row">
+    <div class="col-12 col-md-6">
+    <form action="https://api.web3forms.com/submit" method="POST">
+        
+        <!-- Replace with your Access Key -->
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+        
+        <!-- Form Inputs. Each input must have a name="" attribute -->
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" placeholder="nombre@example.com" name="nombre" required>
+            <label for="floatingInput">Nombre</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" placeholder="656-000-0000" name="telefono" required>
+            <label for="floatingInput">Telefono</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required>
+            <label for="floatingInput">Correo Electronico</label>
+        </div>
+        
+        <div class="form-floating">
+            <textarea class="form-control" placeholder="Deja aquí tu comentario" id="floatingTextarea" name="comentario" required style="height: 100px;"></textarea>
+            <label for="floatingTextarea">Tu mensaje</label>
+      </div>
+
+      <!-- Honeypot Spam Protection -->
+      <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+      
+      <!-- Custom Confirmation / Success Page -->
+      <!-- <input type="hidden" name="redirect" value="https://mywebsite.com/thanks.html"> -->
+
+      <button type="submit" class="btn btn-dark mt-3">Enviar</button>
+      
+    </form>
+    </div>
+    <div class="col-12 col-md-6 mt-3 mt-md-0">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3398.763586254229!2d-106.40266812372383!3d31.585530343918574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e767e3e099e86f%3A0x5e53acce15f55ae6!2sDeportes%20Iris!5e0!3m2!1ses-419!2smx!4v1745354042387!5m2!1ses-419!2smx" style="border:0; width: 100%; height: 100%; aspect-ratio: 1/1;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</div>
+    {% include 'layouts/boton_whatsapp.html' %}
+    {%endblock %}
+
+    {% block content_footer %}
+{% include 'layouts/footer.html' %}
+{% endblock %}

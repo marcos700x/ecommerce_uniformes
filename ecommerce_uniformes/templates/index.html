@@ -1,0 +1,146 @@
+{% extends 'layouts/base.html' %}
+
+
+{% load static %}
+
+{% block index_links %}
+<link rel="stylesheet" href="{% static 'ecommerce_uniformes/styles/index.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script type="module">
+    const swiper = new Swiper('.swiper', {
+        // Optional parameters
+        direction: 'horizontal',
+        loop: true,
+        effect: 'fade',
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        // If we need pagination
+        pagination: {
+            el: '.swiper-pagination',
+        },
+
+        // Navigation arrows
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+
+        // And if we need scrollbar
+        scrollbar: {
+            el: '.swiper-scrollbar',
+        },
+    });
+</script>
+{% endblock %}
+
+
+{% block content_index%}
+<!-- Swiper principal -->
+<div class="swiper swiper-container-custom">
+    <div class="swiper-wrapper">
+
+        <!-- Slide 1 -->
+        <div class="swiper-slide" style="background-image: url('{% static 'ecommerce_uniformes/images/slide-1.png' %}')">
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="swiper-slide" style="background-image: url('{% static 'ecommerce_uniformes/images/slide-2.png' %}')">
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="swiper-slide" style="background-image: url('{% static 'ecommerce_uniformes/images/slide-3.png' %}')">
+        </div>
+
+    </div>
+
+    <!-- Controles de Swiper -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-pagination"></div>
+</div>
+
+
+{% include 'layouts/boton_whatsapp.html' %}
+
+{% endblock %}
+
+{% block content %}
+<hr>
+<section class="my-4">
+    <h1>Más vendidos</h1>
+    <div class="d-flex flex-wrap justify-content-between gap-3 card-container">
+        <div class="card-custom">
+            <img src="{% static 'ecommerce_uniformes/images/pantalon-deportivo.jpg' %}" alt="">
+            <div class="card-description">
+                <div class="fs-4">Pantalones Deportivos</div>
+            </div>
+        </div>
+        <div class="card-custom">
+            <img src="{% static 'ecommerce_uniformes/images/pantalon.jpg' %}" alt="">
+            <div class="card-description">
+                <div class="fs-4">Pantalones</div>
+            </div>
+        </div>
+        <div class="card-custom">
+            <img src="{% static 'ecommerce_uniformes/images/falda.jpg' %}" alt="">
+            <div class="card-description">
+                <div class="fs-4">Faldas</div>
+            </div>
+        </div>
+        <div class="card-custom">
+            <img src="{% static 'ecommerce_uniformes/images/chamarra.jpg' %}" alt="">
+            <div class="card-description">
+                <div class="fs-4">Chamarras</div>
+            </div>
+        </div>
+    </div>
+</section>
+<hr>
+<section class="my-4">
+    <div class="col-lg-10">
+        <h1 class="mb-3">Cuenta con nosotros</h1>
+        <p class="fs-5">
+            En <strong>Deportes Iris</strong>, encontrarás todo lo que necesitas en uniformes escolares para niños y
+            adolescentes, con la mejor calidad y al mejor precio. Desde prendas básicas para el aula hasta ropa
+            deportiva, somos tu tienda integral para equipar a tus hijos durante todo el ciclo escolar.
+        </p>
+        <p class="fs-5">
+            Ya sea para el inicio de clases o para renovar el uniforme a mitad de año, en <strong>Deportes Iris</strong>
+            tenemos una amplia variedad de opciones para kinder, primaria y secundaria. Explora nuestra colección de
+            polos, pantalones, faldas, suéteres y más, todos diseñados para brindar comodidad, resistencia y estilo en
+            el día a día escolar.
+        </p>
+    </div>
+</section>
+<hr>
+<section class="my-4">
+    <div class="text-center mb-4">
+        <h1>Trabajamos con marcas de confianza</h1>
+        <p class="text-muted fs-5">Calidad garantizada a su disposición</p>
+    </div>
+    <div class="row justify-content-center align-items-center text-center g-4">
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="brand-card p-3 border rounded shadow-sm bg-white h-100">
+                <img src="{% static 'ecommerce_uniformes/images/dickies-logo.svg' %}" alt="Dickies" class="img-fluid mb-2"
+                    style="max-height: 100px;">
+                <h5 class="mt-2 mb-0">Dickies</h5>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="brand-card p-3 border rounded shadow-sm bg-white h-100">
+                <img src="{% static 'ecommerce_uniformes/images/alamo-logo.png' %}" alt="Álamo Uniformes" class="img-fluid mb-2"
+                    style="max-height: 100px;">
+                <h5 class="mt-2 mb-0">Álamo Uniformes</h5>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block content_footer %}
+{% include 'layouts/footer.html' %}
+{% endblock %}

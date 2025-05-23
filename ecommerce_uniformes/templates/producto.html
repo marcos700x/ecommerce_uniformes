@@ -1,0 +1,221 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block producto_links %}
+<script src="{% static 'ecommerce_uniformes/scripts/producto.js' %}"></script>
+<script>
+    const variantes = {{ variantes_json| safe }};
+    const favoritos_ids = {{ favoritos_ids|safe }};
+</script>
+<link rel="stylesheet" href="{% static 'ecommerce_uniformes/styles/producto.css' %}">
+{% endblock %}
+
+{% block catalogo_links %}
+{% endblock %}
+
+{% block content %}
+<div class="row contenedor-producto d-flex flex-row fw-light">
+    <div class="col-12 col-md-6 d-flex flex-row h-100">
+        <div class="row p-0 d-flex align-items-center">
+            <div class="col-12 col-md-2 p-0">
+                <div class="mt-2 d-flex flex-column justify-content-start gap-3 w-100">
+                    {% for color_producto in colores %}
+                    <img src="{{ color_producto.imagen_color.url }}" alt="{{ producto.nombre }}"
+                        data-color="{{ color_producto.id }}" class="w-100 thumbnail-switcher"
+                        style="aspect-ratio: 1;object-fit: cover;">
+                    {% endfor %}
+                </div>
+            </div>
+            <img src="{{ producto.imagen_portada.url }}" alt="{{ producto.nombre }}" class="col-12 col-md-10 ps-3"
+                id="imagen-producto" style="height: fit-content;">
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-start px-5 h-100">
+        <!-- Descripción del producto -->
+        <div class="row w-100">
+            <span id="estado-stock" class="fs-5"></span>
+            <div class="d-flex w-100 justify-content-between">
+                <h1 id="nombre-producto">{{ producto.nombre }}</h1>
+                <div class="col-2 d-flex justify-content-center align-items-start pt-2">
+                    <!-- Botón de favorito -->
+                    <button id="btn-favorito" class="bg-transparent border-0 p-0 fs-4" title="Favorito" style="cursor:pointer;">
+                        <i class="bi bi-heart" id="icono-favorito"></i>
+                    </button>
+                </div>
+            </div>
+            <h2 id="precio-producto"></h2>
+            <span id="sku-placeholder"></span>
+        </div>
+
+        <hr class="w-100">
+        <!-- Tallas y Colores -->
+        <div class="row gap-3">
+            <h4 id="descripcion-color">Color:</h4>
+            <div>
+                <form action="" class="d-flex gap-3">
+                    {% for color_producto in colores %}
+                    <label>
+                        <input type="radio" name="opcion-color" class="color-button"
+                            data-color="{{ color_producto.id }}"
+                            style="background-color: {{ color_producto.color.codigo_hex }};">
+                        <div class="input-color" style="background-color: {{color_producto.color.codigo_hex}};"></div>
+                    </label>
+                    {% endfor %}
+                </form>
+            </div>
+
+            <h4 id="descripcion-talla">Talla:</h4>
+            <div id="tallas-container">
+                {% for color_producto, tallas in color_tallas.items %}
+                <div class="tallas-color" data-color="{{ color_producto.id }}">
+                    {% for talla_variante in tallas %}
+                    <label>
+                        <input type="radio" name="opcion-talla" class="talla-button"
+                            data-talla="{{ talla_variante.talla.id }}"
+                            data-variante-id="{{ talla_variante.id }}"
+                            id="talla-{{ talla_variante.talla.id }}">
+                        <span class="input-talla">{{ talla_variante.talla.nombre }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <h4>Cantidad:</h4>
+            <div class="col-3">
+                <input type="number" name="" id="input-cantidad" class="form-control" value="1" min="1"
+                    step="1">
+            </div>
+        </div>
+
+        <hr class="w-100">
+        <button id="btn-pedido" class="btn btn-dark px-5 py-2 mb-4 fs-5"><i class="bi bi-whatsapp me-2"></i>Realizar Pedido</button>
+        <p>{{ producto.descripcion }}</p>
+    </div>
+</div>
+
+{% include 'layouts/boton_whatsapp.html' %}
+
+<!-- Script AJAX para favoritos -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    let varianteSeleccionada = null;
+
+    function actualizarIconoFavorito() {
+        const icono = document.getElementById('icono-favorito');
+        if (!varianteSeleccionada) {
+            icono.className = 'bi bi-heart';
+            icono.classList.remove('activo');
+            return;
+        }
+        if (favoritos_ids.includes(varianteSeleccionada)) {
+            icono.className = 'bi bi-heart-fill';
+            icono.classList.add('activo');
+        } else {
+            icono.className = 'bi bi-heart';
+            icono.classList.remove('activo');
+        }
+    }
+
+    const tallaButtons = document.querySelectorAll('.talla-button');
+    tallaButtons.forEach(btn => {
+        btn.addEventListener('change', function () {
+            varianteSeleccionada = parseInt(this.dataset.varianteId);
+            actualizarIconoFavorito();
+        });
+
+        if (btn.checked) {
+            btn.dispatchEvent(new Event('change'));
+        }
+    });
+
+    document.getElementById('btn-favorito').addEventListener('click', () => {
+        if (!varianteSeleccionada) {
+            alert("Selecciona una talla para añadir a favoritos.");
+            return;
+        }
+
+        const cantidadInput = document.getElementById('input-cantidad');
+        const cantidad = cantidadInput ? parseInt(cantidadInput.value) || 1 : 1;
+
+        fetch(`/toggle-favorito/${varianteSeleccionada}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `cantidad=${cantidad}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.estado === 'agregado') {
+                if (!favoritos_ids.includes(varianteSeleccionada)) {
+                    favoritos_ids.push(varianteSeleccionada);
+                }
+            } else if (data.estado === 'eliminado') {
+                const index = favoritos_ids.indexOf(varianteSeleccionada);
+                if (index !== -1) {
+                    favoritos_ids.splice(index, 1);
+                }
+            }
+            actualizarIconoFavorito();
+        })
+        .catch(() => {
+            alert('Error al actualizar el estado de favorito.');
+        });
+    });
+
+    const cantidadInput = document.getElementById('input-cantidad');
+    cantidadInput.addEventListener('change', () => {
+        if (!varianteSeleccionada) {
+            alert("Selecciona una talla antes de cambiar la cantidad.");
+            cantidadInput.value = 1;
+            return;
+        }
+
+        if (!favoritos_ids.includes(varianteSeleccionada)) {
+            console.log("Cantidad cambiada localmente. Aún no está en favoritos.");
+            return;
+        }
+
+        const nuevaCantidad = parseInt(cantidadInput.value);
+        if (nuevaCantidad < 1) {
+            alert("La cantidad debe ser al menos 1.");
+            cantidadInput.value = 1;
+            return;
+        }
+
+        fetch(`/actualizar-cantidad-favorito/${varianteSeleccionada}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `cantidad=${nuevaCantidad}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.estado === 'ok') {
+                console.log('Cantidad actualizada correctamente.');
+            } else if (data.estado === 'no_agregado') {
+                console.log("Este producto aún no ha sido agregado a favoritos.");
+            } else {
+                alert('No se pudo actualizar la cantidad.');
+            }
+        })
+        .catch(() => {
+            alert('Error al actualizar la cantidad.');
+        });
+    });
+});
+</script>
+
+{% endblock %}
+
+{% block content_footer %}
+{% include 'layouts/footer.html' %}
+{% endblock %}

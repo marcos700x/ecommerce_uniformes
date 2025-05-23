@@ -1,0 +1,42 @@
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row text-center text-md-start">
+            <!-- Logo y descripción -->
+            <div class="col-md-4 mb-4">
+                <h4 class="fw-bold mb-3">Deportes Iris</h4>
+                <p>Uniformes escolares de calidad para niños y adolescentes. Listos para cada día del ciclo escolar</p>
+            </div>
+
+            <!-- Enlaces rápidos -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Enlaces rápidos</h5>
+                <ul class="list-unstyled">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'catalogo' %}">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contacto' %}">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Redes sociales -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Síguenos</h5>
+                <div class="d-flex justify-content-center justify-content-md-start gap-3">
+                    <a href="https://facebook.com" class="text-white fs-4"><i class="bi bi-facebook"></i></a>
+                    <a href="https://wa.me/5211234567890" class="text-white fs-4"><i class="bi bi-whatsapp"></i></a>
+                    <a href="https://instagram.com" class="text-white fs-4"><i class="bi bi-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-top border-light mt-4">
+        <div class="text-center small">
+            &copy; {{ year|default:2025 }} Deportes Iris. Todos los derechos reservados.
+        </div>
+    </div>
+</footer>

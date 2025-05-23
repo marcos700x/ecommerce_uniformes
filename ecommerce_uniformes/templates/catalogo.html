@@ -1,0 +1,211 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block catalogo_links %}
+<link rel="stylesheet" href="{% static 'ecommerce_uniformes/styles/catalogo.css' %}">
+<link rel="stylesheet" href="{% static 'ecommerce_uniformes/styles/carta_producto.css' %}">
+<script>
+  window.usuarioEstaLogueado = {{ request.user.is_authenticated|yesno:"true,false" }};
+  window.favoritosIds = {{ favoritos_ids|safe }};
+</script>
+{% endblock %}
+
+{% block content %}
+<h1 class="mt-5">Catálogo</h1>
+<div class="row">
+  <div class="col-md-2 mt-5 d-flex flex-column">
+    <span class="fs-5 mb-2">Filtros</span>
+
+    <form method="get" id="form-filtros">
+      <div class="accordion accordion-flush" id="accordionExample">
+        <!-- Escuelas -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingEscuelas">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseEscuelas" aria-expanded="false" aria-controls="collapseEscuelas">
+              Escuelas
+            </button>
+          </h2>
+          <div id="collapseEscuelas" class="accordion-collapse collapse" aria-labelledby="headingEscuelas"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              {% for escuela in escuelas %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="escuelas" value="{{ escuela.id }}" id="escuela{{ forloop.counter }}"
+                  {% if escuela.id|stringformat:"s" in escuelas_seleccionadas %}checked{% endif %}>
+                <label class="form-check-label" for="escuela{{ forloop.counter }}">{{ escuela.nombre }}</label>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- Categorías -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingCategorias">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseCategorias" aria-expanded="false" aria-controls="collapseCategorias">
+              Categorías
+            </button>
+          </h2>
+          <div id="collapseCategorias" class="accordion-collapse collapse" aria-labelledby="headingCategorias"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              {% for categoria in categorias %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="categorias" value="{{ categoria.id }}" id="categoria{{ forloop.counter }}"
+                  {% if categoria.id|stringformat:"s" in categorias_seleccionadas %}checked{% endif %}>
+                <label class="form-check-label" for="categoria{{ forloop.counter }}">{{ categoria.nombre }}</label>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- Tallas -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTallas">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseTallas" aria-expanded="false" aria-controls="collapseTallas">
+              Tallas
+            </button>
+          </h2>
+          <div id="collapseTallas" class="accordion-collapse collapse" aria-labelledby="headingTallas"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              {% for talla in tallas %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="tallas" value="{{ talla.id }}" id="talla{{ forloop.counter }}"
+                  {% if talla.id|stringformat:"s" in tallas_seleccionadas %}checked{% endif %}>
+                <label class="form-check-label" for="talla{{ forloop.counter }}">{{ talla.nombre }}</label>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- Disponibilidad -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingDisponibilidad">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseDisponibilidad" aria-expanded="false" aria-controls="collapseDisponibilidad">
+              Disponibilidad
+            </button>
+          </h2>
+          <div id="collapseDisponibilidad" class="accordion-collapse collapse" aria-labelledby="headingDisponibilidad"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="disponibilidad" value="disponible" id="disponible"
+                  {% if "disponible" in disponibilidad_seleccionada %}checked{% endif %}>
+                <label class="form-check-label" for="disponible">Disponible</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="disponibilidad" value="agotado" id="agotado"
+                  {% if "agotado" in disponibilidad_seleccionada %}checked{% endif %}>
+                <label class="form-check-label" for="agotado">Agotado</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+  <div class="contenedor-productos p-2 col-12 col-md-10">
+    {% for item in productos_con_datos %}
+      {% include 'layouts/carta_producto.html' with producto=item.producto precio_min=item.precio_min precio_max=item.precio_max total_stock=item.total_stock en_favoritos=item.en_favoritos variante_id=item.variante_id %}
+    {% endfor %}
+  </div>
+</div>
+
+{% include 'layouts/boton_whatsapp.html' %}
+
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function actualizarFiltros() {
+    const escuelas = Array.from(document.querySelectorAll('#collapseEscuelas input[type="checkbox"]:checked')).map(cb => cb.value);
+    const categorias = Array.from(document.querySelectorAll('#collapseCategorias input[type="checkbox"]:checked')).map(cb => cb.value);
+    const tallas = Array.from(document.querySelectorAll('#collapseTallas input[type="checkbox"]:checked')).map(cb => cb.value);
+    const disp = Array.from(document.querySelectorAll('#collapseDisponibilidad input[type="checkbox"]:checked')).map(cb => cb.value);
+
+    const params = new URLSearchParams();
+    escuelas.forEach(id => params.append('escuelas', id));
+    categorias.forEach(id => params.append('categorias', id));
+    tallas.forEach(id => params.append('tallas', id));
+    disp.forEach(v => params.append('disponibilidad', v));
+
+    window.location.href = window.location.pathname + '?' + params.toString();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Asignar listener a todos los checkboxes de filtros
+    document.querySelectorAll('#accordionExample input[type="checkbox"]').forEach(chk => {
+      chk.addEventListener('change', actualizarFiltros);
+    });
+
+    // Toggle favoritos
+    document.querySelectorAll('.carta-producto').forEach(carta => {
+      const botonFavoritos = carta.querySelector('.boton-favoritos');
+      const varianteId = carta.dataset.varianteId;
+
+      if (window.favoritosIds && window.favoritosIds.includes(parseInt(varianteId))) {
+        botonFavoritos.classList.add('activo');
+      } else {
+        botonFavoritos.classList.remove('activo');
+      }
+
+      botonFavoritos.addEventListener('click', () => {
+        if (!window.usuarioEstaLogueado) {
+          alert('Debes iniciar sesión para agregar productos a favoritos.');
+          return;
+        }
+
+        fetch(`/toggle-favorito/${varianteId}/`, {
+          method: 'POST',
+          headers: { 'X-CSRFToken': getCookie('csrftoken') },
+          credentials: 'same-origin',
+        })
+          .then(res => {
+            if (res.status === 401 || res.status === 403) {
+              alert('No tienes permiso para realizar esta acción. Por favor inicia sesión.');
+              throw new Error('No autorizado');
+            }
+            return res.json();
+          })
+          .then(data => {
+            if (data.estado === 'agregado') {
+              botonFavoritos.classList.add('activo');
+              alert('Producto agregado a favoritos');
+            } else if (data.estado === 'eliminado') {
+              botonFavoritos.classList.remove('activo');
+              alert('Producto removido de favoritos');
+            }
+          })
+          .catch(err => {
+            console.error('Error al actualizar favorito:', err);
+            if (err.message !== 'No autorizado') {
+              alert('Error al actualizar favorito');
+            }
+          });
+      });
+    });
+  });
+</script>
+{% endblock %}
+
+{% block content_footer %}
+{% include 'layouts/footer.html' %}
+{% endblock %}

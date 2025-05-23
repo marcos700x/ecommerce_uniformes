@@ -1,0 +1,50 @@
+.contenedor-producto{
+    height: 90vh;
+}
+
+.input-color{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    outline: 2px solid #b1b1b1;
+    outline-offset: 3px;
+    cursor: pointer;
+    display: inline-block;
+    transition: all .3s ease;
+}
+
+input[type="radio"]{
+display: none;
+}
+
+input[type="radio"]:checked + .input-color{
+    outline: 2px solid #000000;
+    transform: scale(1.1);
+}
+
+.input-talla{
+    padding: 0.5rem 1rem;
+    border: 2px solid #b1b1b1;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+input[type="radio"]:checked + .input-talla{
+    border: 2px solid #000000;
+    /* transform: scale(1.2); */
+}
+.thumbnail-switcher{
+    cursor: pointer;
+    transition: all .3s ease;  
+}
+.thumbnail-switcher:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+
+
+.activo{
+      color: red;
+      transform: all .3s ease;
+}

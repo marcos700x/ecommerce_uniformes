@@ -1,0 +1,34 @@
+<div class="carta-producto w-100 border-0 position-relative" data-variante-id="{{ variante_id }}"  data-producto-id="{{ producto.id }}">
+  <div class="boton-favoritos {% if en_favoritos %}activo{% endif %}">
+    <i class="bi bi-heart-fill boton-favoritos-fill fs-3"></i>
+    <i class="bi bi-heart boton-favoritos-outline fs-3"></i>
+  </div>
+  <div class="contenedor-imagen">
+    <img src="{{ producto.imagen_portada.url }}" alt="{{ producto.nombre }}" class="img-fluid">
+  </div>
+  <div class="p-2">
+    <p class="m-0 fw-medium">
+      {% if total_stock > 10 %}
+        <span class="etiqueta-stock text-success">En stock</span>
+      {% elif total_stock > 0 %}
+        <span class="etiqueta-stock text-warning">Pocas unidades</span>
+      {% else %}
+        <span class="etiqueta-stock text-danger">Agotado</span>
+      {% endif %}
+    </p>
+
+    <h5 class="card-title text-truncate">{{ producto.nombre }}</h5>
+
+    {% if precio_min and precio_max %}
+      <p class="card-text my-1 fs-5">Desde ${{ precio_min }} hasta ${{ precio_max }} MXN</p>
+    {% else %}
+      <p class="card-text my-3 text-muted">Precio no disponible</p>
+    {% endif %}
+
+    <a href="{% url 'producto' producto.id %}"
+       class="btn btn-dark d-block fs-5 {% if total_stock <= 0 %}d-none{% endif %}"
+       title="Ver más detalles de {{ producto.nombre }}">
+      <i class="bi bi-bag-fill me-2"></i>Ver más
+    </a>
+  </div>
+</div>

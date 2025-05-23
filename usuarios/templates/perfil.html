@@ -1,0 +1,87 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block perfil_links %}
+<link rel="stylesheet" href="{% static 'usuarios/styles/perfil.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 bg-light border p-0 pb-5 contenedor-perfil">
+  <div class="banner-perfil"></div>
+  <div class="row px-5 py-5">
+    <h3>Mi información</h3>
+    <h4 class="text-muted">Actualiza tu informacion y detalles personales</h4>
+  </div>
+  <div class="row px-5 py-3">
+    <p class="fs-5"><strong>Usuario</strong> {{ user.username }}</p>
+    <p class="fs-5"><strong>Email</strong> {{ user.email }}</p>
+  </div>
+  <hr>
+  <div class="row">
+    
+<form method="post">
+  {% csrf_token %}
+
+  <!-- Nombre y Apellido -->
+  <div class="row px-5 py-3 align-items-center">
+    <p class="m-0 mb-2 col-12 col-md-2 fs-5 fw-bold">Nombre</p>
+    <div class="col-12 col-md-10 d-flex flex-row gap-5 flex-wrap">
+      <div class="col-12 col-md-4">
+        {{ form_nombre.first_name.label_tag }}
+        {{ form_nombre.first_name }}
+      </div>
+      <div class="col-12 col-md-4">
+        {{ form_nombre.last_name.label_tag }}
+        {{ form_nombre.last_name }}
+      </div>
+    </div>
+  </div>
+<hr>
+  <!-- Dirección -->
+  <div class="row px-5 py-3 align-items-center">
+    <p class="m-0 mb-2 col-12 col-md-2 fs-5 fw-bold">Dirección</p>
+    <div class="col-12 col-md-10 d-flex flex-row gap-5 flex-wrap">
+      <div class="col-12 col-md-3">
+        {{ form.colonia.label_tag }}
+        {{ form.colonia }}
+      </div>
+      <div class="col-12 col-md-3">
+        {{ form.calle.label_tag }}
+        {{ form.calle }}
+      </div>
+      <div class="col-12 col-md-2">
+        {{ form.ciudad.label_tag }}
+        {{ form.ciudad }}
+      </div>
+      <div class="col-12 col-md-2">
+        {{ form.estado.label_tag }}
+        {{ form.estado }}
+      </div>
+      <div class="col-12 col-md-2">
+        {{ form.codigo_postal.label_tag }}
+        {{ form.codigo_postal }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Teléfono -->
+  <hr>
+  <div class="d-flex flex-row align-items-center  px-5 flex-wrap">
+    <p class="m-0 fs-5 fw-bold col-12 col-md-2">Teléfono</p>
+    <div class="col-12 col-md-3">
+      {{ form.telefono.label_tag }}
+      {{ form.telefono }}
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-dark mt-5 ms-5">Guardar cambios</button>
+</form>
+  </div>
+  {% include 'layouts/boton_whatsapp.html' %}
+</div>
+
+{% endblock %}
+{% block content_footer %}
+{% include 'layouts/footer.html' %}
+{% endblock %}
